@@ -44,6 +44,6 @@ rdgiskdcproxy:i:0
 kdcproxyname:s:
 drivestoredirect:s:
 redirectdirectx:i:1
-full address:s:{#address}
-username:s:{#username}
-password 51:b:{#password}
+full address:s:{0}
+username:s:{1}
+password 51:b:{2}

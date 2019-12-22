@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Security;
 
-namespace RDPdemo
+namespace RemoteDesktopConnection
 {
     [Serializable()]
     public sealed class DataProtection
@@ -30,7 +30,6 @@ namespace RDPdemo
             CRYPTPROTECT_CRED_REGENERATE = 0x80
         }
 
-        #region 加密数据
         public static string ProtectData(string data, string name)
         {
             return ProtectData(data, name,
@@ -54,78 +53,50 @@ namespace RDPdemo
                 return null;
         }
 
-        /// <summary>
-        /// 加密数据
-        /// </summary>
-        /// <param name="data">要加密的明文数据</param>
-        /// <param name="name">有意义的描述，此描述会加到加密后的数据中</param>
-        /// <param name="dwFlags">flags的位标志</param>
-        /// <returns></returns>
+
         private static byte[] ProtectData(byte[] data, string name, CryptProtectDataFlags dwFlags)
         {
             byte[] cipherText = null;
 
             // copy data into unmanaged memory
-            //DATA_BLOB结构，用于CryptProtectData参数
             DPAPI.DATA_BLOB din = new DPAPI.DATA_BLOB();
             din.cbData = data.Length;
 
-            //Marshal类的作用：提供了一个方法集，这些方法用于分配非托管内存、复制非托管内存块、将托管类型转换为非托管类型，
-            //此外还提供了在与非托管代码交互时使用的其他杂项方法。 
-            //为din.pbData分配内存
             din.pbData = Marshal.AllocHGlobal(din.cbData);
 
-            //InPtr结构:用于表示指针或句柄的平台特定类型
-            //分配内存错误，抛出内存不足异常
-            //IntPtr.Zero:一个只读字段，代表已初始化为零的指针或句柄
             if (din.pbData.Equals(IntPtr.Zero))
                 throw new OutOfMemoryException("Unable to allocate memory for buffer.");
 
-            //将data数组中的数据复制到pbData内存指针中
             Marshal.Copy(data, 0, din.pbData, din.cbData);
 
-            //声明DPAPI类的DATA_BLOB公共结构类型
             DPAPI.DATA_BLOB dout = new DPAPI.DATA_BLOB();
 
             try
             {
-                //加密数据
                 bool cryptoRetval = DPAPI.CryptProtectData(ref din, name, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, dwFlags, ref dout);
 
-                //判断加密是否成功
-                if (cryptoRetval) // 成功
+                if (cryptoRetval) 
                 {
                     int startIndex = 0;
-                    //分配cipherText数据元素大小为dout.cbData
                     cipherText = new byte[dout.cbData];
-                    //从dout.pbData内存指针指向的内容拷贝到byte数组cipherText中
                     Marshal.Copy(dout.pbData, cipherText, startIndex, dout.cbData);
-                    //从内存中释放指针指向的数据I
                     DPAPI.LocalFree(dout.pbData);
                 }
                 else
                 {
-                    //加密失败，获得错误信息
                     int errCode = Marshal.GetLastWin32Error();
                     StringBuilder buffer = new StringBuilder(256);
-                    //显示错误信息
                     Win32Error.FormatMessage(Win32Error.FormatMessageFlags.FORMAT_MESSAGE_FROM_SYSTEM, IntPtr.Zero, errCode, 0, buffer, buffer.Capacity, IntPtr.Zero);
                 }
             }
             finally
             {
-                // 如果din.pbData非空，则释放din.pbData使用的内存
                 if (!din.pbData.Equals(IntPtr.Zero))
                     Marshal.FreeHGlobal(din.pbData);
             }
 
-            //返回加密后的数据
             return cipherText;
         }
-        #endregion
-
-
-        //解密数据
 
         internal static void InitPromptstruct(ref DPAPI.CRYPTPROTECT_PROMPTSTRUCT ps)
         {
@@ -136,7 +107,6 @@ namespace RDPdemo
         }
     }
 
-    //允许托管代码不经过堆栈步即调入非托管代码
     [SuppressUnmanagedCodeSecurityAttribute()]
     internal class DPAPI
     {
@@ -167,7 +137,6 @@ namespace RDPdemo
             public string szPrompt; // = null
         }
     }
-
 
     internal class Win32Error
     {
