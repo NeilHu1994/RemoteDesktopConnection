@@ -2,14 +2,14 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace Telsafe
+namespace RDP
 {
     class Program
     {
         static void Main(string[] args)
         {
 
-            var info = new LoginInfo();
+            var info = new LogInfo();
         #if debug
             Console.WriteLine("please enter ipAddress");
             while (true)

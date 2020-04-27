@@ -1,6 +1,6 @@
-﻿namespace Telsafe
+﻿namespace RDP
 {
-    class LoginInfo
+    class LogInfo
     {
         public string Ipaddress { get; set; }
         public string Username { get; set; }

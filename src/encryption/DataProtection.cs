@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Security;
 
-namespace Telsafe
+namespace RDP
 {
     [Serializable()]
     public sealed class DataProtection

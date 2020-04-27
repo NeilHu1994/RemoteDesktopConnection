@@ -44,17 +44,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RdpConstant.cs" />
-    <Compile Include="LoginInfo.cs" />
+    <Compile Include="LogInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Handle\DataProtection.cs" />
-    <Compile Include="Handle\Rdp.cs" />
+    <Compile Include="encryption\DataProtection.cs" />
+    <Compile Include="encryption\Rdp.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Handle\TemplateRDP.txt" />
+    <None Include="encryption\TemplateRDP.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

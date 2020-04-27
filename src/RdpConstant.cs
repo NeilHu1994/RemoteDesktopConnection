@@ -1,4 +1,4 @@
-﻿namespace Telsafe
+﻿namespace RDP
 {
     class RdpConstant
     {

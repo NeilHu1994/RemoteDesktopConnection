@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace Telsafe
+namespace RDP
 {
     class RdpHandler
     {
-        public static void Rrocess(LoginInfo info) {
+        public static void Rrocess(LogInfo info) {
             if (string.IsNullOrEmpty(info.Username) || string.IsNullOrEmpty(info.Password)) {
                 throw new ArgumentNullException("username and password can't be empty");
             }
